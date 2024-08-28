@@ -7,7 +7,7 @@
         <title>{{ $question ? $question->question : '' }}</title>
 
         {{--meta tags for facebook --}}
-        <meta property="og:title" content="{{$question->question}}" />
+        <meta property="og:title" content="{{$question ? $question->question : ''}}" />
         <meta property="og:type" content="text/plain" />
         <meta property="og:url" content="{{ env('APP_URL') }}" />
 {{--        <meta property="og:image" content="https://ia.media-imdb.com/images/rock.jpg" />--}}
@@ -94,27 +94,29 @@
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
+{{--                        @if (Route::has('register'))--}}
+{{--                            <a href="{{ route('register') }}">Register</a>--}}
+{{--                        @endif--}}
                     @endauth
                 </div>
             @endif
 
+
+
+                @if($question)
             <div class="content">
                 @if(!\Illuminate\Support\Facades\Cookie::get('voted'))
                     <form style="font-size: 20px; width: 400px;" action="{{route('submit.vote')}}" method="post">
                         @csrf
-
-                        <p class="question">{{$question->question}}</p>
-                        @foreach($question->options as $option)
-                            <div class="form-check" style="display: flex; margin-bottom: 2px;">
-                                <input class="form-check-input" type="radio" name="option_id" id="{{$option->id}}" value="{{$option->id}}">
-                                <label class="form-check-label font-weight-bold" style="font-size: 16px;" for="{{$option->id}}">
-                                    {{ucfirst($option->option)}}
-                                </label>
-                            </div>
-                        @endforeach
+                            <p class="question">{{$question->question}}</p>
+                            @foreach($question->options as $option)
+                                <div class="form-check" style="display: flex; margin-bottom: 2px;">
+                                    <input class="form-check-input" type="radio" name="option_id" id="{{$option->id}}" value="{{$option->id}}">
+                                    <label class="form-check-label font-weight-bold" style="font-size: 16px;" for="{{$option->id}}">
+                                        {{ucfirst($option->option)}}
+                                    </label>
+                                </div>
+                            @endforeach
 
                         <button class="btn btn-sm btn-primary float-right" type="submit">
                             <span class="pl-3 pr-3 pt-2 pb-2">SAVE</span>
@@ -129,6 +131,11 @@
 
                     </div>
                 @endif
+
+                    @else
+                        <p>No Data Available</p>
+
+            @endif
             </div>
         </div>
     </body>
